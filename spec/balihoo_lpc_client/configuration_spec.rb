@@ -44,6 +44,18 @@ module BalihooLpcClient
       end
     end
 
+    describe ".client_id" do
+      it "defaults to nil" do
+        expect(subject.client_id).to be_nil
+      end
+    end
+
+    describe ".client_api_key" do
+      it "defaults to nil" do
+        expect(subject.client_api_key).to be_nil
+      end
+    end
+
     describe ".base_url" do
       it "concats api_url and api_version" do
         expect(subject.url).to eq [subject.api_base, subject.api_version].join(?/)

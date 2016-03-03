@@ -5,5 +5,10 @@ module BalihooLpcClient
     def initialize(config:)
       self.config = config
     end
+
+    def authenticate!
+      auth = Requests::Authentication.new(connection: self)
+      auth.authenticate!
+    end
   end
 end
