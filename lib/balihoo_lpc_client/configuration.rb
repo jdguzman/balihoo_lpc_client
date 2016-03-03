@@ -1,11 +1,18 @@
 module BalihooLpcClient
   class Configuration
-    attr_accessor :api_base, :api_version
+    attr_accessor :api_base, :api_version, :brand_key, :api_key, :location_key,
+                  :user_id, :group_id
 
     def initialize
       defaults.each do |k, v|
         self.send("#{k}=", v)
       end
+    end
+
+    def self.create
+      config = new
+      yield config if block_given?
+      config
     end
 
     def url
@@ -17,7 +24,12 @@ module BalihooLpcClient
     def defaults
       {
         api_base: "https://bac.dev.balihoo-connect.com/localdata",
-        api_version: "v1.0"
+        api_version: "v1.0",
+        brand_key: nil,
+        api_key: nil,
+        location_key: nil,
+        user_id: nil,
+        group_id: nil
       }
     end
   end
