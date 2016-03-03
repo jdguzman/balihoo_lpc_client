@@ -1,5 +1,5 @@
 module BalihooLpcClient
-  module Requests
+  module Request
     class Authentication < Base
       def authenticate!
         self.class.post('genClientAPIKey')

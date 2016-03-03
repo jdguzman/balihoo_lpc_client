@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 module BalihooLpcClient
-  module Requests
+  module Request
     describe Authentication do
       let(:config) { Configuration.new }
       let(:connection) { Connection.new(config: config) }

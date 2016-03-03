@@ -1,5 +1,5 @@
 module BalihooLpcClient
-  module Requests
+  module Request
     class Base
       include HTTParty
 
