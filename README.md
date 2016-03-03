@@ -1,6 +1,6 @@
 [![Code Climate](https://codeclimate.com/github/riverock/balihoo_lpc_client/badges/gpa.svg)](https://codeclimate.com/github/riverock/balihoo_lpc_client)
 [![Test Coverage](https://codeclimate.com/github/riverock/balihoo_lpc_client/badges/coverage.svg)](https://codeclimate.com/github/riverock/balihoo_lpc_client/coverage)
-[![Build Status](https://travis-ci.org/riverock/balihoo_lpc_client.svg?branch=master)](https://travis-ci.org/riverock/balihoo_lpc_client)
+[![Build Status](https://travis-ci.org/riverock/balihoo_lpc_client.svg?branch=develop)](https://travis-ci.org/riverock/balihoo_lpc_client)
 
 # BalihooLpcClient
 
