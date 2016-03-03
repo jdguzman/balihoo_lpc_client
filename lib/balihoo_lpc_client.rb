@@ -1,5 +1,12 @@
 require "balihoo_lpc_client/version"
+require "balihoo_lpc_client/configuration"
 
 module BalihooLpcClient
-  # Your code goes here...
+  def self.configure
+    yield configuration
+  end
+
+  def self.configuration
+    @configuration ||= Configuration.new
+  end
 end
