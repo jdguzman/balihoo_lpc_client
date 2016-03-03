@@ -13,14 +13,14 @@ module BalihooLpcClient
     end
 
     describe '.authenticate!' do
-      it 'creates an instance of Requests::Authentication' do
-        expect(Requests::Authentication).to receive(:new).with(connection: subject).and_call_original
-        allow_any_instance_of(Requests::Authentication).to receive(:authenticate!)
+      it 'creates an instance of Request::Authentication' do
+        expect(Request::Authentication).to receive(:new).with(connection: subject).and_call_original
+        allow_any_instance_of(Request::Authentication).to receive(:authenticate!)
         subject.authenticate!
       end
 
-      it 'calls authenticate! on Requests::Authentication instance' do
-        expect_any_instance_of(Requests::Authentication).to receive(:authenticate!)
+      it 'calls authenticate! on Request::Authentication instance' do
+        expect_any_instance_of(Request::Authentication).to receive(:authenticate!)
         subject.authenticate!
       end
     end

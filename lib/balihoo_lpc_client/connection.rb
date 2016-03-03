@@ -7,7 +7,7 @@ module BalihooLpcClient
     end
 
     def authenticate!
-      auth = Requests::Authentication.new(connection: self)
+      auth = Request::Authentication.new(connection: self)
       auth.authenticate!
     end
   end
