@@ -20,8 +20,22 @@ module BalihooLpcClient
 
       describe '.authenticate!' do
         it 'calls api endpoint genClientAPIKey' do
-          expect(Authentication).to receive(:post).with('genClientAPIKey')
+          expect(Authentication).to receive(:post).with('/genClientAPIKey').and_return('{}')
           subject.authenticate!
+        end
+
+        it 'sets config client_id when authentication successful' do
+          stub_request(:post, "#{subject.class.base_uri}/genClientAPIKey")
+              .to_return(status: 200, body: '{"clientId":"test_client_id","clientApiKey":"test_client_api_key"}')
+          subject.authenticate!
+          expect(config.client_id).to eq 'test_client_id'
+        end
+
+        it 'sets config client_api_key when authentication successful' do
+          stub_request(:post, "#{subject.class.base_uri}/genClientAPIKey")
+              .to_return(status: 200, body: '{"clientId":"test_client_id","clientApiKey":"test_client_api_key"}')
+          subject.authenticate!
+          expect(config.client_api_key).to eq 'test_client_api_key'
         end
       end
     end

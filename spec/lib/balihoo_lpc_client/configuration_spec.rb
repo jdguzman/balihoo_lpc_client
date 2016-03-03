@@ -56,7 +56,7 @@ module BalihooLpcClient
       end
     end
 
-    describe ".base_url" do
+    describe ".url" do
       it "concats api_url and api_version" do
         expect(subject.url).to eq [subject.api_base, subject.api_version].join(?/)
       end
