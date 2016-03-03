@@ -14,6 +14,11 @@ describe BalihooLpcClient do
       expect(described_class).to receive(:configuration)
       described_class.configure { |c| }
     end
+
+    it 'changes configuration values' do
+      described_class.configure { |c| c.api_base = 'http://example.com' }
+      expect(described_class.configuration.api_base).to eq 'http://example.com'
+    end
   end
 
   describe '#configuration' do
