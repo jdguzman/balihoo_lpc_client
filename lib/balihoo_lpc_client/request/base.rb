@@ -15,6 +15,12 @@ module BalihooLpcClient
       def config
         connection.config
       end
+
+      def handle_errors_with(klass:, response:)
+        unless response.parsed_response.is_a?(Hash)
+          raise klass, response.parsed_response
+        end
+      end
     end
   end
 end

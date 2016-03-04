@@ -3,7 +3,15 @@ require 'spec_helper'
 module BalihooLpcClient
   module Request
     describe Authentication do
-      let(:config) { Configuration.new }
+      let(:config) do
+        Configuration.create do |c|
+          c.brand_key = 'foo'
+          c.api_key = 'key'
+          c.location_key = '1'
+          c.user_id = 'foo'
+          c.group_id = 'foo'
+        end
+      end
       let(:connection) { Connection.new(config: config) }
 
       subject { Authentication.new(connection: connection) }
@@ -19,23 +27,58 @@ module BalihooLpcClient
       end
 
       describe '.authenticate!' do
-        it 'calls api endpoint genClientAPIKey' do
-          expect(Authentication).to receive(:post).with('/genClientAPIKey').and_return('{}')
-          subject.authenticate!
+        let(:params) do
+          '?brandKey=foo&apiKey=key&locationKey=1&userId=foo&groupId=foo'
         end
 
-        it 'sets config client_id when authentication successful' do
-          stub_request(:post, "#{subject.class.base_uri}/genClientAPIKey")
-              .to_return(status: 200, body: '{"clientId":"test_client_id","clientApiKey":"test_client_api_key"}')
-          subject.authenticate!
-          expect(config.client_id).to eq 'test_client_id'
+        context 'success' do
+          let(:return_opts) do
+            {
+              status: 200,
+              body: '{"clientId":"test_client_id","clientApiKey":"test_client_api_key"}',
+              headers: { 'Content-Type' => 'application/json; charset=utf-8' }
+            }
+          end
+
+          before do
+            stub_request(:post, "#{subject.class.base_uri}/genClientAPIKey#{params}")
+              .to_return(**return_opts)
+          end
+
+          it 'calls api endpoint genClientAPIKey' do
+            expect(Authentication).to receive(:post).with('/genClientAPIKey', any_args).and_call_original
+            subject.authenticate!
+          end
+
+          it 'sets config client_id when authentication successful' do
+            subject.authenticate!
+            expect(config.client_id).to eq 'test_client_id'
+          end
+
+          it 'sets config client_api_key when authentication successful' do
+            subject.authenticate!
+            expect(config.client_api_key).to eq 'test_client_api_key'
+          end
+
+          it 'returns parsed response do' do
+            expect(subject.authenticate!).to eq JSON.parse(return_opts[:body])
+          end
         end
 
-        it 'sets config client_api_key when authentication successful' do
-          stub_request(:post, "#{subject.class.base_uri}/genClientAPIKey")
-              .to_return(status: 200, body: '{"clientId":"test_client_id","clientApiKey":"test_client_api_key"}')
-          subject.authenticate!
-          expect(config.client_api_key).to eq 'test_client_api_key'
+        context 'error' do
+          let(:return_opts) do
+            {
+              status: 401,
+              body: 'Could not authenticate',
+              headers: { 'Content-Type' => 'text/plain; charset=utf-8' }
+            }
+          end
+
+          it 'raises AuthenticationError if authentication fails' do
+            stub_request(:post, "#{subject.class.base_uri}/genClientAPIKey#{params}")
+                .to_return(**return_opts)
+            expect { subject.authenticate! }.to raise_error AuthenticationError
+          end
         end
       end
     end

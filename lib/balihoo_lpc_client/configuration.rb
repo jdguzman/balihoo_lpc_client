@@ -23,7 +23,7 @@ module BalihooLpcClient
 
     def defaults
       {
-        api_base: "https://bac.dev.balihoo-connect.com/localdata",
+        api_base: "https://bac.dev.balihoo-cloud.com/localdata",
         api_version: "v1.0"
       }
     end
