@@ -3,7 +3,9 @@ require 'spec_helper'
 module BalihooLpcClient
   module Response
     describe Authentication do
-      subject { described_class.new({'clientId' => 'clientId', 'clientApiKey' => 'clientApiKey'}) }
+      let(:params) { {'clientId' => 'clientId', 'clientApiKey' => 'clientApiKey'} }
+
+      subject { described_class.new(params) }
 
       it 'has property clientId' do
         expect(described_class.properties).to include 'clientId'

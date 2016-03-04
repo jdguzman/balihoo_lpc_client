@@ -2,7 +2,15 @@ require 'spec_helper'
 
 module BalihooLpcClient
   describe Connection do
-    let(:config) { Configuration.new }
+    let(:config) do
+      Configuration.create do |c|
+        c.brand_key = 'foo'
+        c.api_key = 'key'
+        c.location_key = '1'
+        c.user_id = 'foo'
+        c.group_id = 'foo'
+      end
+    end
 
     subject { Connection.new(config: config) }
 
@@ -22,6 +30,29 @@ module BalihooLpcClient
       it 'calls authenticate! on Request::Authentication instance' do
         expect_any_instance_of(Request::Authentication).to receive(:authenticate!)
         subject.authenticate!
+      end
+    end
+
+    describe '.campaigns' do
+      it 'accepts hash options with default of {}' do
+        allow_any_instance_of(Request::Campaigns).to receive(:fetch)
+        expect { subject.campaigns(params: {}) }.not_to raise_error
+      end
+
+      it 'raises MissingApiOptionError if opts locations missing and config location_key nil' do
+        config.location_key = nil
+        expect { subject.campaigns }.to raise_error ApiOptionError
+      end
+
+      it 'creates an instance of Request::Campaigns' do
+        allow_any_instance_of(Request::Campaigns).to receive(:fetch)
+        expect(Request::Campaigns).to receive(:new).with(connection: subject, params: {}).and_call_original
+        subject.campaigns
+      end
+
+      it 'calls fetch on a Request::Campaigns instance' do
+        expect_any_instance_of(Request::Campaigns).to receive(:fetch)
+        subject.campaigns
       end
     end
   end
