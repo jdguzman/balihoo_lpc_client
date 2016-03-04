@@ -1,8 +1,8 @@
 module BalihooLpcClient
   module Request
-    class Campaigns < ApiBase
+    class CampaignsWithTactics < ApiBase
       def fetch
-        self.class.get('/campaigns', opts).parsed_response.map do |result|
+        self.class.get('/campaignswithtactics', opts).parsed_response.map do |result|
           Response::Campaign.new result
         end
       end

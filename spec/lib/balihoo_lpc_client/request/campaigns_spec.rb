@@ -47,7 +47,7 @@ module BalihooLpcClient
           let(:return_opts) do
             {
               status: 200,
-              body: '[{"id":1,"title":"Test","description":"","start":"2015-09-21","end":"2016-10-07","status":"active"}]',
+              body: '[{"id":224,"title":"Evergreen Campaign","description":"","start":"2015-09-21","end":"2016-10-07","status":"active"}]',
               headers: { 'Content-Type' => 'application/json; charset=utf-8' }
             }
           end

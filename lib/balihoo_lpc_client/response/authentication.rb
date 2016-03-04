@@ -1,11 +1,10 @@
 module BalihooLpcClient
   module Response
     class Authentication < Hashie::Dash
-      property 'clientId'
-      property 'clientApiKey'
-
-      alias_method :client_id, :clientId
-      alias_method :client_api_key, :clientApiKey
+      include Hashie::Extensions::Dash::PropertyTranslation
+      
+      property :client_id, from: 'clientId'
+      property :client_api_key, from: 'clientApiKey'
     end
   end
 end

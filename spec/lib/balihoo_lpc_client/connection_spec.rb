@@ -55,5 +55,28 @@ module BalihooLpcClient
         subject.campaigns
       end
     end
+
+    describe '.campaigns_with_tactics' do
+      it 'accepts hash options with default of {}' do
+        allow_any_instance_of(Request::CampaignsWithTactics).to receive(:fetch)
+        expect { subject.campaigns_with_tactics(params: {}) }.not_to raise_error
+      end
+
+      it 'raises MissingApiOptionError if opts locations missing and config location_key nil' do
+        config.location_key = nil
+        expect { subject.campaigns_with_tactics }.to raise_error ApiOptionError
+      end
+
+      it 'creates an instance of Request::Campaigns' do
+        allow_any_instance_of(Request::CampaignsWithTactics).to receive(:fetch)
+        expect(Request::CampaignsWithTactics).to receive(:new).with(connection: subject, params: {}).and_call_original
+        subject.campaigns_with_tactics
+      end
+
+      it 'calls fetch on a Request::Campaigns instance' do
+        expect_any_instance_of(Request::CampaignsWithTactics).to receive(:fetch)
+        subject.campaigns_with_tactics
+      end
+    end
   end
 end
