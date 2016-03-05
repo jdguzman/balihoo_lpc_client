@@ -71,6 +71,11 @@ module BalihooLpcClient
         expect { described_class.create }.not_to raise_error
       end
 
+      it 'accepts configuration options via args hash' do
+        config = described_class.create(brand_key: 'brand_key', api_key: 'api_key')
+        expect([config.brand_key, config.api_key]).to eq ['brand_key', 'api_key']
+      end
+
       it 'returns an instance of Configuration' do
         expect(described_class.create).to be_an_instance_of(Configuration)
       end
