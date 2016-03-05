@@ -82,7 +82,7 @@ location to get campaigns for. _Passing multiple locations in the array is not
 supported by the gem yet but is coming._
 
 ```ruby
-api.campaigns({ locations: [1] }) # => Array[BalihooLpcClient::Response::Campaign]
+api.campaigns({ locations: '1' }) # => Array[BalihooLpcClient::Response::Campaign]
 ```
 
 ## Development
