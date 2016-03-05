@@ -9,9 +9,11 @@ require 'balihoo_lpc_client/request/api_base'
 require 'balihoo_lpc_client/request/authentication'
 require 'balihoo_lpc_client/request/campaigns'
 require 'balihoo_lpc_client/request/campaigns_with_tactics'
+require 'balihoo_lpc_client/request/metrics'
 require 'balihoo_lpc_client/response/authentication'
 require 'balihoo_lpc_client/response/tactic'
 require 'balihoo_lpc_client/response/campaign'
+require 'balihoo_lpc_client/response/metric'
 
 module BalihooLpcClient
   class BalihooLpcError < StandardError; end

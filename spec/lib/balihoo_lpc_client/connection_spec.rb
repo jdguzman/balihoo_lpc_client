@@ -67,15 +67,38 @@ module BalihooLpcClient
         expect { subject.campaigns_with_tactics }.to raise_error ApiOptionError
       end
 
-      it 'creates an instance of Request::Campaigns' do
+      it 'creates an instance of Request::CampaignsWithTactics' do
         allow_any_instance_of(Request::CampaignsWithTactics).to receive(:fetch)
         expect(Request::CampaignsWithTactics).to receive(:new).with(connection: subject, params: {}).and_call_original
         subject.campaigns_with_tactics
       end
 
-      it 'calls fetch on a Request::Campaigns instance' do
+      it 'calls fetch on a Request::CampaignsWithTactics instance' do
         expect_any_instance_of(Request::CampaignsWithTactics).to receive(:fetch)
         subject.campaigns_with_tactics
+      end
+    end
+
+    describe '.metrics' do
+      it 'accepts hash options with default of {}' do
+        allow_any_instance_of(Request::Metrics).to receive(:fetch)
+        expect { subject.metrics(tactic_id: 1, params: {}) }.not_to raise_error
+      end
+
+      it 'raises MissingApiOptionError if opts locations missing and config location_key nil' do
+        config.location_key = nil
+        expect { subject.metrics(tactic_id: 1) }.to raise_error ApiOptionError
+      end
+
+      it 'creates an instance of Request::Metrics' do
+        allow_any_instance_of(Request::Metrics).to receive(:fetch)
+        expect(Request::Metrics).to receive(:new).with(connection: subject, params: {}, tactic_id: 1).and_call_original
+        subject.metrics(tactic_id: 1)
+      end
+
+      it 'calls fetch on a Request::Metrics instance' do
+        expect_any_instance_of(Request::Metrics).to receive(:fetch)
+        subject.metrics(tactic_id: 1)
       end
     end
   end

@@ -21,6 +21,11 @@ module BalihooLpcClient
       Request::CampaignsWithTactics.new(connection: self, params: params).fetch
     end
 
+    def metrics(tactic_id:, params: {})
+      validate_params!(params: params)
+      Request::Metrics.new(connection: self, params: params, tactic_id: tactic_id).fetch
+    end
+
     private
 
     def validate_params!(params:)
