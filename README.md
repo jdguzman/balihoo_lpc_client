@@ -81,8 +81,8 @@ The options are as follows:
 
 - `from:` A start date to filter results, with the format `yyyy-mm-dd`
 - `to:` An end date to filter results, with the format `yyyy-mm-dd`
-- `locations:` A location or locations to get data for. If location_key was
-given during authentications this should not be used.
+- `locations:` A location or locations to get data for. _*If location_key was
+given during authentication this should not be used.*_
 - `tactic_id:` Tactic id to filter results. Only supported with
 `get_report_data` endpoint.
 
