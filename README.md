@@ -68,6 +68,24 @@ config.client_api_key # => <client_api_key from Balihoo>
 
 Once we have authenticated we can begin to call the various endpoints.
 
+### Endpoint Options
+
+There are a set of common options that can be sent to an endpoint. These are
+always sent as the params argument to an endpoint.
+
+```ruby
+api.campaigns(params: options)
+```
+
+The options are as follows:
+
+- `from:` A start date to filter results, with the format `yyyy-mm-dd`
+- `to:` An end date to filter results, with the format `yyyy-mm-dd`
+- `locations:` A location or locations to get data for. If location_key was
+given during authentications this should not be used.
+- `tactic_id:` Tactic id to filter results. Only supported with
+`get_report_data` endpoint.
+
 ### Campaigns
 
 If you passed a `location_key` to the config then you can simply call
@@ -77,12 +95,12 @@ If you passed a `location_key` to the config then you can simply call
 api.campaigns # => Array[BalihooLpcClient::Response::Campaign]
 ```
 
-If the `location_key` was not passed then you must pass an array with a single
-location to get campaigns for. _Passing multiple locations in the array is not
-supported by the gem yet but is coming._
+If the `location_key` was not passed then you must pass a location to get
+campaigns for. _Passing multiple locations is not supported by the gem yet but
+is coming._
 
 ```ruby
-api.campaigns({ locations: '1' }) # => Array[BalihooLpcClient::Response::Campaign]
+api.campaigns(params: { locations: '1' }) # => Array[BalihooLpcClient::Response::Campaign]
 ```
 
 ## Development
