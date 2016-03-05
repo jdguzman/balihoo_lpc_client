@@ -12,11 +12,11 @@ module BalihooLpcClient
       def opts
         {
           query: {
-            brandKey: connection.config.brand_key,
-            apiKey: connection.config.api_key,
-            locationKey: connection.config.location_key,
-            userId: connection.config.user_id,
-            groupId: connection.config.group_id
+            brandKey: api.config.brand_key,
+            apiKey: api.config.api_key,
+            locationKey: api.config.location_key,
+            userId: api.config.user_id,
+            groupId: api.config.group_id
           }
         }
       end

@@ -3,17 +3,17 @@ module BalihooLpcClient
     class Base
       include HTTParty
 
-      attr_accessor :connection
+      attr_accessor :api
 
-      def initialize(connection:)
-        self.connection = connection
+      def initialize(api:)
+        self.api = api
         self.class.base_uri config.url
       end
 
       private
 
       def config
-        connection.config
+        api.config
       end
 
       def handle_errors_with(klass:, response:)

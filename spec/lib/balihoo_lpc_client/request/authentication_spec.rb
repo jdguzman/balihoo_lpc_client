@@ -12,13 +12,13 @@ module BalihooLpcClient
           c.group_id = 'foo'
         end
       end
-      let(:connection) { Connection.new(config: config) }
+      let(:api) { Api.new(config: config) }
 
-      subject { Authentication.new(connection: connection) }
+      subject { Authentication.new(api: api) }
 
       describe '.initialize' do
-        it 'sets connection for class' do
-          expect(subject.connection).to eq connection
+        it 'sets api for class' do
+          expect(subject.api).to eq api
         end
 
         it 'set class base_uri' do

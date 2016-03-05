@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 module BalihooLpcClient
-  describe Connection do
+  describe Api do
     let(:config) do
       Configuration.create do |c|
         c.brand_key = 'foo'
@@ -12,7 +12,7 @@ module BalihooLpcClient
       end
     end
 
-    subject { Connection.new(config: config) }
+    subject { described_class.new(config: config) }
 
     describe '.initialize' do
       it 'sets config for class' do
@@ -22,7 +22,7 @@ module BalihooLpcClient
 
     describe '.authenticate!' do
       it 'creates an instance of Request::Authentication' do
-        expect(Request::Authentication).to receive(:new).with(connection: subject).and_call_original
+        expect(Request::Authentication).to receive(:new).with(api: subject).and_call_original
         allow_any_instance_of(Request::Authentication).to receive(:authenticate!)
         subject.authenticate!
       end
@@ -46,7 +46,7 @@ module BalihooLpcClient
 
       it 'creates an instance of Request::Campaigns' do
         allow_any_instance_of(Request::Campaigns).to receive(:fetch)
-        expect(Request::Campaigns).to receive(:new).with(connection: subject, params: {}).and_call_original
+        expect(Request::Campaigns).to receive(:new).with(api: subject, params: {}).and_call_original
         subject.campaigns
       end
 
@@ -69,7 +69,7 @@ module BalihooLpcClient
 
       it 'creates an instance of Request::CampaignsWithTactics' do
         allow_any_instance_of(Request::CampaignsWithTactics).to receive(:fetch)
-        expect(Request::CampaignsWithTactics).to receive(:new).with(connection: subject, params: {}).and_call_original
+        expect(Request::CampaignsWithTactics).to receive(:new).with(api: subject, params: {}).and_call_original
         subject.campaigns_with_tactics
       end
 
@@ -92,7 +92,7 @@ module BalihooLpcClient
 
       it 'creates an instance of Request::Metrics' do
         allow_any_instance_of(Request::Metrics).to receive(:fetch)
-        expect(Request::Metrics).to receive(:new).with(connection: subject, params: {}, tactic_id: 1).and_call_original
+        expect(Request::Metrics).to receive(:new).with(api: subject, params: {}, tactic_id: 1).and_call_original
         subject.metrics(tactic_id: 1)
       end
 

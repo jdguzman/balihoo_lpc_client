@@ -3,8 +3,8 @@ module BalihooLpcClient
     class ApiBase < Base
       attr_accessor :params
 
-      def initialize(connection:, params:)
-        super(connection: connection)
+      def initialize(api:, params:)
+        super(api: api)
         self.params = params
       end
 
@@ -13,8 +13,8 @@ module BalihooLpcClient
       def opts
         {
           headers: {
-            'X-ClientId' => connection.config.client_id,
-            'X-ClientApiKey' => connection.config.client_api_key
+            'X-ClientId' => api.config.client_id,
+            'X-ClientApiKey' => api.config.client_api_key
           },
           query: params
         }

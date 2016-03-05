@@ -3,8 +3,8 @@ module BalihooLpcClient
     class Metrics < ApiBase
       attr_accessor :tactic_id
 
-      def initialize(connection:, params:, tactic_id:)
-        super(connection: connection, params: params)
+      def initialize(api:, params:, tactic_id:)
+        super(api: api, params: params)
         self.tactic_id = tactic_id
       end
 

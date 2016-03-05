@@ -14,13 +14,13 @@ module BalihooLpcClient
           c.client_api_key = 'key' #simulating that authenticate has been called
         end
       end
-      let(:connection) { Connection.new(config: config) }
+      let(:api) { Api.new(config: config) }
 
-      subject { described_class.new(connection: connection, params: {}) }
+      subject { described_class.new(api: api, params: {}) }
 
       describe '.initialize' do
-        it 'sets connection for class' do
-          expect(subject.connection).to eq connection
+        it 'sets api for class' do
+          expect(subject.api).to eq api
         end
 
         it 'sets params for class' do
