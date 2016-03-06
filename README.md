@@ -68,7 +68,9 @@ config.client_api_key # => <client_api_key from Balihoo>
 
 Once we have authenticated we can begin to call the various endpoints.
 
-### Endpoint Options
+### Endpoints
+
+#### Common Options
 
 There are a set of common options that can be sent to an endpoint. These are
 always sent as the params argument to an endpoint.
@@ -86,7 +88,7 @@ given during authentication this should not be used.*_
 - `tactic_id:` Tactic id to filter results. Only supported with
 `get_report_data` endpoint.
 
-### Campaigns
+#### Campaigns
 
 If you passed a `location_key` to the config then you can simply call
 `campaigns` on the api object.
@@ -101,6 +103,26 @@ is coming._
 
 ```ruby
 api.campaigns(params: { locations: '1' }) # => Array[BalihooLpcClient::Response::Campaign]
+```
+
+#### Campaigns with Tactics
+
+```ruby
+response = api.campaigns_with_tactics # => Array[BalihooLpcClient::Response::Campaign]
+response.tactics # => Array[BalihooLpcClient::Response::Tactic]
+
+# Without location_key using locations: param
+response = api.campaigns_with_tactics(params: { locations: '1' }) # => Array[BalihooLpcClient::Response::Campaign]
+response.tactics # => Array[BalihooLpcClient::Response::Tactic]
+```
+
+#### Metrics
+
+```ruby
+api.metrics(tactic_id: 1) # => BalihooLpcClient::Response::Metric
+
+# Without location_key using locations: param
+api.metrics(tactic_id: 1, params: { locations: '1' }) # => BalihooLpcClient::Response::Metric
 ```
 
 ## Development
