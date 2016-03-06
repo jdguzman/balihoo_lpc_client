@@ -108,10 +108,10 @@ api.campaigns(params: { locations: '1' }) # => Array[BalihooLpcClient::Response:
 #### Tactics
 
 ```ruby
-api.tactics(campaign_id: 1) # => BalihooLpcClient::Response::Tactic
+api.tactics(campaign_id: 1) # => Array[BalihooLpcClient::Response::Tactic]
 
 # Without location_key using locations: param
-api.tactics(campaign_id: 1, params: { locations: '1' }) # => BalihooLpcClient::Response::Tactic
+api.tactics(campaign_id: 1, params: { locations: '1' }) # => Array[BalihooLpcClient::Response::Tactic]
 ```
 
 #### Campaigns with Tactics
