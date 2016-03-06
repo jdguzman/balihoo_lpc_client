@@ -130,7 +130,7 @@ api.metrics(tactic_id: 1, params: { locations: '1' }) # => BalihooLpcClient::Res
 #### Campaign
 
 ```ruby
-campaign.id # => Int
+campaign.id # => Fixnum
 campaign.title # => String
 campaign.description # => String
 campaign.start # => Date
@@ -144,7 +144,7 @@ _Note: `tactics` is only populated if `campaigns_with_tactics` is called._
 #### Tactic
 
 ```ruby
-tactic.id # => Int
+tactic.id # => Fixnum
 tactic.title # => String
 tactic.start # => Date
 tactic.end # => Date
@@ -158,9 +158,9 @@ tactic.creative # => String - this is a url
 ```ruby
 metric.tactic_ids # => Array[Int]
 metric.channel # => String
-metric.clicks # => Int
+metric.clicks # => Fixnum
 metric.spend # Float
-metric.impressions # => Int
+metric.impressions # => Fixnum
 metric.ctr # Float
 metric.avg_cpc # Float
 metric.avg_cpm # Float
