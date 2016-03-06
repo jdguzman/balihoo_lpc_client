@@ -125,6 +125,47 @@ api.metrics(tactic_id: 1) # => BalihooLpcClient::Response::Metric
 api.metrics(tactic_id: 1, params: { locations: '1' }) # => BalihooLpcClient::Response::Metric
 ```
 
+### Response Objects
+
+#### Campaign
+
+```ruby
+campaign.id # => Int
+campaign.title # => String
+campaign.description # => String
+campaign.start # => Date
+campaign.end # => Date
+campaign.status # => String
+campaign.tactics # => Array[BalihooLpcClient::Response::Tactic]
+```
+
+_Note: `tactics` is only populated if `campaigns_with_tactics` is called._
+
+#### Tactic
+
+```ruby
+tactic.id # => Int
+tactic.title # => String
+tactic.start # => Date
+tactic.end # => Date
+tactic.channel # => String
+tactic.description # => String
+tactic.creative # => String - this is a url
+```
+
+#### Metric
+
+```ruby
+metric.tactic_ids # => Array[Int]
+metric.channel # => String
+metric.clicks # => Int
+metric.spend # Float
+metric.impressions # => Int
+metric.ctr # Float
+metric.avg_cpc # Float
+metric.avg_cpm # Float
+```
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run
