@@ -16,6 +16,11 @@ module BalihooLpcClient
       Request::Campaigns.new(api: self, params: params).fetch
     end
 
+    def tactics(campaign_id:, params: {})
+      validate_params!(params: params)
+      Request::Tactics.new(api: self, params: params, campaign_id: campaign_id).fetch
+    end
+
     def campaigns_with_tactics(params: {})
       validate_params!(params: params)
       Request::CampaignsWithTactics.new(api: self, params: params).fetch

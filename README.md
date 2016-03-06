@@ -105,6 +105,15 @@ is coming._
 api.campaigns(params: { locations: '1' }) # => Array[BalihooLpcClient::Response::Campaign]
 ```
 
+#### Tactics
+
+```ruby
+api.tactics(campaign_id: 1) # => BalihooLpcClient::Response::Tactic
+
+# Without location_key using locations: param
+api.tactics(campaign_id: 1, params: { locations: '1' }) # => BalihooLpcClient::Response::Tactic
+```
+
 #### Campaigns with Tactics
 
 ```ruby
