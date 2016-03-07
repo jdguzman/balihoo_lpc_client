@@ -226,8 +226,8 @@ metric.avg_cpm # Float
 #### BalihooLpcClient::Response::WebsiteMetric
 
 ```ruby
-metric.visits # => Response::WebsiteMetricVisits
-metric.leads # => Response::WebsiteMetricLeads
+website_metric.visits # => Response::WebsiteMetricVisits
+website_metric.leads # => Response::WebsiteMetricLeads
 ```
 
 #### BalihooLpcClient::Response::WebsiteMetricVisits
