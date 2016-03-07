@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q{Ruby Client for Balihoo's LPC API}
   spec.description   = %q{Ruby Client for Balihoo's LPC API}
-  spec.homepage      = "https://github.com/riverock/balihoo_lpc"
+  spec.homepage      = "https://github.com/riverock/balihoo_lpc_client"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org by setting 'allowed_push_host', or
