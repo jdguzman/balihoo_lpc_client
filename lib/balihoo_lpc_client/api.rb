@@ -34,8 +34,12 @@ module BalihooLpcClient
     private
 
     def validate_params_and_fetch!(**args)
-      if config.location_key.nil? && args[:params][:locations].nil?
-        raise ApiOptionError, 'must pass opts[:locations] array since no location_key given'
+      locations = args[:params][:locations]
+
+      if config.location_key.nil? && locations.nil?
+        raise ApiOptionError, 'must give params[:locations] since no location_key given'
+      elsif config.location_key.nil? && !locations.is_a?(Array)
+        raise ApiOptionError, 'locations must be an array'
       end
 
       fetch(**args)

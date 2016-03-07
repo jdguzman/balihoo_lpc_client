@@ -9,8 +9,8 @@ module BalihooLpcClient
       end
 
       def fetch
-        r = self.class.get("/tactic/#{tactic_id}/metrics", opts).parsed_response
-        Response::Metric.new r
+        response = self.class.get("/tactic/#{tactic_id}/metrics", opts).parsed_response
+        handle_response(response: response, klass: Response::Metric, mappable: false)
       end
     end
   end

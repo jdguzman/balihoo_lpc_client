@@ -9,8 +9,12 @@ module BalihooLpcClient
       end
 
       def fetch
-        self.class.get("/campaign/#{campaign_id}/tactics", opts).parsed_response['tactics'].map do |result|
-          Response::Tactic.new result
+        response = self.class.get("/campaign/#{campaign_id}/tactics", opts).parsed_response
+
+        if multiple_locations?
+          multiple_locations(response: response, klass: Response::Tactic, mappable: true)
+        else
+          single_location(response: response['tactics'], klass: Response::Tactic, mappable: true)
         end
       end
     end

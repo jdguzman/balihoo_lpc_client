@@ -47,7 +47,7 @@ module BalihooLpcClient
           let(:return_opts) do
             {
               status: 200,
-              body: '[{"id":224,"title":"Evergreen Campaign","description":"","start":"2015-09-21","end":"2016-10-07","status":"active"}]',
+              body: '[{"id":224,"title":"Title","description":"","start":"2015-09-21","end":"2016-10-07","status":"active"}]',
               headers: { 'Content-Type' => 'application/json; charset=utf-8' }
             }
           end
@@ -69,18 +69,65 @@ module BalihooLpcClient
           end
 
           context 'with params' do
-            let(:params_hash) { { locations: '1', from: '2016-01-01', to: '2016-01-31' } }
+            subject { described_class.new(api: api, params: { locations: [1], from: '2016-01-01', to: '2016-01-31' }) }
+
             let(:params) do
-              arr = params_hash.map do |k, v|
+              arr = subject.send(:sanitized_params).map do |k, v|
                 "#{k}=#{v}"
               end
               arr.any? ? "?#{arr.join('&')}" : ''
             end
 
-            it 'passes params to api call' do
-              subject.params = params_hash
-              expect(described_class).to receive(:get).with('/campaigns', { headers: request_headers, query: params_hash }).and_call_original
-              subject.fetch
+            context 'location key missing' do
+              let(:config) do
+                Configuration.create do |c|
+                  c.brand_key = 'foo'
+                  c.api_key = 'key'
+                  c.user_id = 'foo'
+                  c.group_id = 'foo'
+                  c.client_id = 'id' #simulating that authenticate has been called
+                  c.client_api_key = 'key' #simulating that authenticate has been called
+                end
+              end
+
+              it 'passes params to api call' do
+                expect(described_class).to receive(:get).with('/campaigns', { headers: request_headers, query: subject.send(:sanitized_params) }).and_call_original
+                subject.fetch
+              end
+
+              context 'requesting single location' do
+                it 'returns an array of Response::Campaign objects' do
+                  returned = JSON.parse return_opts[:body]
+                  expect(subject.fetch).to eq returned.map { |o| Response::Campaign.new(o) }
+                end
+              end
+
+              context 'requesting multiple locations' do
+                subject { described_class.new(api: api, params: { locations: [1,2], from: '2016-01-01', to: '2016-01-31' }) }
+
+                let(:return_opts) do
+                  {
+                    status: 200,
+                    body: '{"1":[{"id":224,"title":"Title","description":"","start":"2015-09-21","end":"2016-10-07","status":"active"}],"2":[{"id":224,"title":"Title","description":"","start":"2015-09-21","end":"2016-10-07","status":"active"}]}',
+                    headers: { 'Content-Type' => 'application/json; charset=utf-8' }
+                  }
+                end
+
+                it 'returns a hash with location as key and values of Response::Campaign objects' do
+                  returned = JSON.parse return_opts[:body]
+                  returned = returned.inject({}) do |h, pair|
+                    h.merge({ pair[0] => pair[1].map { |v| Response::Campaign.new(v) } })
+                  end
+                  expect(subject.fetch).to eq returned
+                end
+              end
+            end
+
+            context 'location_key present' do
+              it 'removes locations if location_key is present' do
+                expect(described_class).to receive(:get).with('/campaigns', { headers: request_headers, query: subject.send(:sanitized_params) }).and_call_original
+                subject.fetch
+              end
             end
           end
         end

@@ -34,18 +34,25 @@ module BalihooLpcClient
     end
 
     describe '.campaigns' do
-      it 'accepts hash options with default of {}' do
+      before do
         allow_any_instance_of(Request::Campaigns).to receive(:fetch)
+      end
+
+      it 'accepts hash options with default of {}' do
         expect { subject.campaigns(params: {}) }.not_to raise_error
       end
 
-      it 'raises MissingApiOptionError if opts locations missing and config location_key nil' do
+      it 'raises ApiOptionError if opts locations missing and config location_key nil' do
         config.location_key = nil
         expect { subject.campaigns }.to raise_error ApiOptionError
       end
 
+      it 'raises ApiOptionError if opts locations is not an array' do
+        config.location_key = nil
+        expect { subject.campaigns(params: { locations: '1' }) }.to raise_error ApiOptionError
+      end
+
       it 'creates an instance of Request::Campaigns' do
-        allow_any_instance_of(Request::Campaigns).to receive(:fetch)
         expect(Request::Campaigns).to receive(:new).with(api: subject, params: {}).and_call_original
         subject.campaigns
       end
