@@ -97,9 +97,8 @@ If you passed a `location_key` to the config then you can simply call
 api.campaigns # => Array[Response::Campaign]
 ```
 
-If the `location_key` was not passed then you must pass a location to get
-campaigns for. _Passing multiple locations is not supported by the gem yet but
-is coming._
+If the `location_key` was not passed then you must pass an array of locations to
+get campaigns for.
 
 ```ruby
 # Single location requested
