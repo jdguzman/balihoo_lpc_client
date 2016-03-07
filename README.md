@@ -83,7 +83,7 @@ The options are as follows:
 
 - `from:` A start date to filter results, with the format `yyyy-mm-dd`
 - `to:` An end date to filter results, with the format `yyyy-mm-dd`
-- `locations:` A location or locations to get data for. _*If location_key was
+- `locations:` An array of locations (Use location key). _*If location_key was
 given during authentication this should not be used.*_
 - `tactic_id:` Tactic id to filter results. Only supported with
 `get_report_data` endpoint.
@@ -94,7 +94,7 @@ If you passed a `location_key` to the config then you can simply call
 `campaigns` on the api object.
 
 ```ruby
-api.campaigns # => Array[BalihooLpcClient::Response::Campaign]
+api.campaigns # => Array[Response::Campaign]
 ```
 
 If the `location_key` was not passed then you must pass a location to get
@@ -102,16 +102,29 @@ campaigns for. _Passing multiple locations is not supported by the gem yet but
 is coming._
 
 ```ruby
-api.campaigns(params: { locations: '1' }) # => Array[BalihooLpcClient::Response::Campaign]
+# Single location requested
+campaigns = api.campaigns(params: { locations: [1] })
+campaigns # => Array[Response::Campaign]
+
+# Multiple locations requested
+campaigns = api.campaigns(params: { locations: [1,2] })
+campaigns # => { "1" => Array[Response::Campaign], "2" => Array[Response::Campaign] }
 ```
 
 #### Tactics
 
 ```ruby
-api.tactics(campaign_id: 1) # => Array[BalihooLpcClient::Response::Tactic]
+tactics = api.tactics(campaign_id: 1)
+tactics # => Array[BalihooLpcClient::Response::Tactic]
 
 # Without location_key using locations: param
-api.tactics(campaign_id: 1, params: { locations: '1' }) # => Array[BalihooLpcClient::Response::Tactic]
+# Single location requested
+tactics = api.tactics(campaign_id: 1, params: { locations: [1] })
+tactics # => Array[BalihooLpcClient::Response::Tactic]
+
+# Multiple locations requested
+tactics = api.tactics(campaign_id: 1, params: { locations: [1,2] })
+tactics # => { "1" => Array[Response::Tactic], "2" => Array[Response::Tactic] }
 ```
 
 #### Campaigns with Tactics
@@ -121,22 +134,58 @@ response = api.campaigns_with_tactics # => Array[BalihooLpcClient::Response::Cam
 response.tactics # => Array[BalihooLpcClient::Response::Tactic]
 
 # Without location_key using locations: param
-response = api.campaigns_with_tactics(params: { locations: '1' }) # => Array[BalihooLpcClient::Response::Campaign]
-response.tactics # => Array[BalihooLpcClient::Response::Tactic]
+# Single location requested
+campaigns = api.campaigns_with_tactics(params: { locations: [1] })
+campaigns # => Array[BalihooLpcClient::Response::Campaign]
+campaigns.first.tactics # => Array[BalihooLpcClient::Response::Tactic]
+
+# Multiple locations requested
+campaigns = api.campaigns_with_tactics(params: { locations: [1,2] })
+campaigns # => { "1" => Array[Response::Campaign], "2" => Array[Response::Campaign] }
 ```
 
 #### Metrics
 
 ```ruby
-api.metrics(tactic_id: 1) # => BalihooLpcClient::Response::Metric
+metrics = api.metrics(tactic_id: 1)
+metrics # => Response::Metric
 
 # Without location_key using locations: param
-api.metrics(tactic_id: 1, params: { locations: '1' }) # => BalihooLpcClient::Response::Metric
+# Single location requested
+metrics = api.metrics(tactic_id: 1, params: { locations: [1] })
+metrics # => Response::Metric
+
+# Multiple locations requested
+metrics = api.metrics(tactic_id: 1, params: { locations: [1,2] })
+metrics # => {"1" => Response::Metric, "2" => Response::Metric}
+```
+
+#### Website Metrics
+
+```ruby
+website_metrics = api.website_metrics
+website_metrics # => Response::WebsiteMetric
+
+# Without location_key using locations: param
+# Single location requested
+website_metrics = api.website_metrics(params: { locations: [1] })
+website_metrics # => Response::WebsiteMetric
+
+# Multiple locations requested
+website_metrics = api.website_metrics(params: { locations: [1,2] })
+website_metrics # => {"1" => Response::WebsiteMetric, "2" => Response::WebsiteMetric}
 ```
 
 ### Response Objects
 
-#### Campaign
+#### BalihooLpcClient::Response::Authentication
+
+```ruby
+auth.client_id # => String (GUID)
+auth.client_api_key # => String (GUID)
+```
+
+#### BalihooLpcClient::Response::Campaign
 
 ```ruby
 campaign.id # => Fixnum
@@ -150,7 +199,7 @@ campaign.tactics # => Array[BalihooLpcClient::Response::Tactic]
 
 _Note: `tactics` is only populated if `campaigns_with_tactics` is called._
 
-#### Tactic
+#### BalihooLpcClient::Response::Tactic
 
 ```ruby
 tactic.id # => Fixnum
@@ -162,7 +211,7 @@ tactic.description # => String
 tactic.creative # => String - this is a url
 ```
 
-#### Metric
+#### BalihooLpcClient::Response::Metric
 
 ```ruby
 metric.tactic_ids # => Array[Int]
@@ -174,6 +223,35 @@ metric.ctr # Float
 metric.avg_cpc # Float
 metric.avg_cpm # Float
 ```
+
+#### BalihooLpcClient::Response::WebsiteMetric
+
+```ruby
+metric.visits # => Response::WebsiteMetricVisits
+metric.leads # => Response::WebsiteMetricLeads
+```
+
+#### BalihooLpcClient::Response::WebsiteMetricVisits
+
+```ruby
+visits.total # => Fixnum
+visits.organic # => Fixnum
+visits.direct # => Fixnum
+visits.referral # => Fixnum
+visits.paid # => Fixnum
+visits.new_visits_percent # => Float
+```
+
+#### BalihooLpcClient::Response::WebsiteMetricLeads
+
+```ruby
+leads.total # => Fixnum
+leads.total_web # => Fixnum
+leads.total_phone # => Fixnum
+leads.organic_web # => Fixnum
+leads.paid_web # => Fixnum
+leads.organic_phone # => Fixnum
+leads.paid_phone # => Fixnum
 
 ## Development
 
