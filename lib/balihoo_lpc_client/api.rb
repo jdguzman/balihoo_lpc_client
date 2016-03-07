@@ -12,36 +12,38 @@ module BalihooLpcClient
     end
 
     def campaigns(params: {})
-      validate_params!(params: params)
-      Request::Campaigns.new(api: self, params: params).fetch
+      validate_params_and_fetch!(params: params, class: Request::Campaigns)
     end
 
     def tactics(campaign_id:, params: {})
-      validate_params!(params: params)
-      Request::Tactics.new(api: self, params: params, campaign_id: campaign_id).fetch
+      validate_params_and_fetch!(params: params, campaign_id: campaign_id, class: Request::Tactics)
     end
 
     def campaigns_with_tactics(params: {})
-      validate_params!(params: params)
-      Request::CampaignsWithTactics.new(api: self, params: params).fetch
+      validate_params_and_fetch!(params: params, class: Request::CampaignsWithTactics)
     end
 
     def metrics(tactic_id:, params: {})
-      validate_params!(params: params)
-      Request::Metrics.new(api: self, params: params, tactic_id: tactic_id).fetch
+      validate_params_and_fetch!(params: params, tactic_id: tactic_id, class: Request::Metrics)
     end
 
     def website_metrics(params: {})
-      validate_params!(params: params)
-      Request::WebsiteMetrics.new(api: self, params: params).fetch
+      validate_params_and_fetch!(params: params, class: Request::WebsiteMetrics)
     end
 
     private
 
-    def validate_params!(params:)
-      if config.location_key.nil? && params[:locations].nil?
+    def validate_params_and_fetch!(**args)
+      if config.location_key.nil? && args[:params][:locations].nil?
         raise ApiOptionError, 'must pass opts[:locations] array since no location_key given'
       end
+
+      fetch(**args)
+    end
+
+    def fetch(**args)
+      klass = args.delete(:class)
+      klass.new(api: self, **args).fetch
     end
   end
 end
