@@ -251,6 +251,7 @@ leads.organic_web # => Fixnum
 leads.paid_web # => Fixnum
 leads.organic_phone # => Fixnum
 leads.paid_phone # => Fixnum
+```
 
 ## Development
 
