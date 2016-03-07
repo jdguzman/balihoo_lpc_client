@@ -175,6 +175,14 @@ website_metrics = api.website_metrics(params: { locations: [1,2] })
 website_metrics # => {"1" => Response::WebsiteMetric, "2" => Response::WebsiteMetric}
 ```
 
+#### Report Data
+
+**This endpoint has not been implemented.**
+
+#### Profile Data
+
+**This endpoint has not been implemented.**
+
 ### Response Objects
 
 #### BalihooLpcClient::Response::Authentication
