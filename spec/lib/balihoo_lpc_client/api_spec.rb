@@ -124,5 +124,28 @@ module BalihooLpcClient
         subject.metrics(tactic_id: 1)
       end
     end
+
+    describe '.website_metrics' do
+      it 'accepts hash options with default of {}' do
+        allow_any_instance_of(Request::WebsiteMetrics).to receive(:fetch)
+        expect { subject.website_metrics(params: {}) }.not_to raise_error
+      end
+
+      it 'raises MissingApiOptionError if opts locations missing and config location_key nil' do
+        config.location_key = nil
+        expect { subject.website_metrics }.to raise_error ApiOptionError
+      end
+
+      it 'creates an instance of Request::WebsiteMetrics' do
+        allow_any_instance_of(Request::WebsiteMetrics).to receive(:fetch)
+        expect(Request::WebsiteMetrics).to receive(:new).with(api: subject, params: {}).and_call_original
+        subject.website_metrics
+      end
+
+      it 'calls fetch on a Request::WebsiteMetrics instance' do
+        expect_any_instance_of(Request::WebsiteMetrics).to receive(:fetch)
+        subject.website_metrics
+      end
+    end
   end
 end

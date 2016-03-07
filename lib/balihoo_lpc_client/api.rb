@@ -31,6 +31,11 @@ module BalihooLpcClient
       Request::Metrics.new(api: self, params: params, tactic_id: tactic_id).fetch
     end
 
+    def website_metrics(params: {})
+      validate_params!(params: params)
+      Request::WebsiteMetrics.new(api: self, params: params).fetch
+    end
+
     private
 
     def validate_params!(params:)

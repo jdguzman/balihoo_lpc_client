@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module BalihooLpcClient
   module Request
-    describe Metrics do
+    describe WebsiteMetrics do
       let(:config) do
         Configuration.create do |c|
           c.brand_key = 'foo'
@@ -16,7 +16,7 @@ module BalihooLpcClient
       end
       let(:api) { Api.new(config: config) }
 
-      subject { described_class.new(api: api, params: {}, tactic_id: '1') }
+      subject { described_class.new(api: api, params: {}) }
 
       describe '.initialize' do
         it 'sets api for class' do
@@ -25,10 +25,6 @@ module BalihooLpcClient
 
         it 'sets params for class' do
           expect(subject.params).to eq({})
-        end
-
-        it 'sets tactic_id for class' do
-          expect(subject.tactic_id).to eq '1'
         end
       end
 
@@ -51,25 +47,25 @@ module BalihooLpcClient
           let(:return_opts) do
             {
               status: 200,
-              body: '{"tacticIds":[575],"channel":"Paid Search","clicks":37,"spend":150.95,"impressions":1170,"ctr":3.16,"avgCpc":4.08,"avgCpm":129.02}',
+              body: '{"visits":{"total":667,"organic":88,"direct":19,"referral":560,"paid":0,"newVisitsPercent":0.6896551724137931},"leads":{"total":1,"totalWeb":0,"totalPhone":1,"organicWeb":0,"paidWeb":0,"organicPhone":1,"paidPhone":0}}',
               headers: { 'Content-Type' => 'application/json; charset=utf-8' }
             }
           end
 
           before do
-            stub_request(:get, "#{subject.class.base_uri}/tactic/#{subject.tactic_id}/metrics#{params}")
+            stub_request(:get, "#{subject.class.base_uri}/websitemetrics#{params}")
               .with(:headers => request_headers)
               .to_return(**return_opts)
           end
 
-          it 'calls api endpoint metrics' do
-            expect(described_class).to receive(:get).with("/tactic/#{subject.tactic_id}/metrics", any_args).and_call_original
+          it 'calls api endpoint websitemetrics' do
+            expect(described_class).to receive(:get).with("/websitemetrics", any_args).and_call_original
             subject.fetch
           end
 
-          it 'returns a Response::Metric object' do
+          it 'returns a Response::WebsiteMetric object' do
             returned = JSON.parse return_opts[:body]
-            expect(subject.fetch).to eq Response::Metric.new(returned)
+            expect(subject.fetch).to eq Response::WebsiteMetric.new(returned)
           end
 
           context 'with params' do
@@ -83,7 +79,7 @@ module BalihooLpcClient
 
             it 'passes params to api call' do
               subject.params = params_hash
-              expect(described_class).to receive(:get).with("/tactic/#{subject.tactic_id}/metrics", { headers: request_headers, query: params_hash }).and_call_original
+              expect(described_class).to receive(:get).with("/websitemetrics", { headers: request_headers, query: params_hash }).and_call_original
               subject.fetch
             end
           end
