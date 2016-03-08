@@ -52,8 +52,6 @@ module BalihooLpcClient
       if config.client_id.nil? || config.client_api_key.nil?
         raise NotAuthenticatedError, 'must call authenticate! before any endpoint'
       end
-
-      true
     end
 
     def fetch(**args)
