@@ -131,6 +131,48 @@ module BalihooLpcClient
             end
           end
         end
+
+        context 'error' do
+          let(:request_headers) do
+            {
+              'X-ClientId' => config.client_id,
+              'X-ClientApiKey' => config.client_api_key
+            }
+          end
+
+          before do
+            stub_request(:get, "#{subject.class.base_uri}/campaigns#{params}")
+              .with(headers: request_headers).to_return(**return_opts)
+          end
+
+          context 'session expired' do
+            let(:return_opts) do
+              {
+                status: 401,
+                body: 'Client api session has expired',
+                headers: { 'Content-Type' => 'text/plain; charset=utf-8' }
+              }
+            end
+
+            it 'raises ApiSessionExpiredError if session expired' do
+              expect { subject.fetch }.to raise_error ApiSessionExpiredError
+            end
+          end
+
+          context 'other errors' do
+            let(:return_opts) do
+              {
+                status: 401,
+                body: 'Some other error.',
+                headers: { 'Content-Type' => 'text/plain; charset=utf-8' }
+              }
+            end
+
+            it 'raises ApiResponseError for all other errors' do
+              expect { subject.fetch }.to raise_error ApiResponseError
+            end
+          end
+        end
       end
     end
   end

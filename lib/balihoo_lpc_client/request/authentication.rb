@@ -2,9 +2,9 @@ module BalihooLpcClient
   module Request
     class Authentication < Base
       def authenticate!
-        response = self.class.post('/genClientAPIKey', opts)
+        response = self.class.post('/genClientAPIKey', opts).parsed_response
         handle_errors_with(klass: AuthenticationError, response: response)
-        handle_success(response.parsed_response)
+        handle_success(response: response)
       end
 
       private
@@ -21,8 +21,8 @@ module BalihooLpcClient
         }
       end
 
-      def handle_success(data)
-        auth = Response::Authentication.new(data)
+      def handle_success(response:)
+        auth = Response::Authentication.new(response)
         config.client_id = auth.client_id
         config.client_api_key = auth.client_api_key
         auth

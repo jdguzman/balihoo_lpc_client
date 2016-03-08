@@ -17,8 +17,12 @@ module BalihooLpcClient
       end
 
       def handle_errors_with(klass:, response:)
-        unless response.parsed_response.is_a?(Hash)
-          raise klass, response.parsed_response
+        if response.is_a?(String)
+          if response =~ /session has expired/
+            raise ApiSessionExpiredError, response
+          else
+            raise klass, response
+          end
         end
       end
     end
