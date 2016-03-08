@@ -40,8 +40,17 @@ opts = {
   location_key: 'location_key', # optional more below
   user_id: 'brand_key', # currently not used, Balihoo suggests setting same as brand_key
   group_id: 'brand_key' # currently not used, Balihoo suggests setting same as brand_key
+  api_base: 'http://baseurl' # defaults to https://bac.dev.balihoo-cloud.com
+  api_version: 'v1.0' # defaults to v1.0
 }
 config = BalihooLpcClient::Configuration.create(opts)
+
+# Blocks are also supported with the create method
+
+config = BalihooLpcClient::Configuration.create(some_opts) do |c|
+  c.api_base = 'https://bac.dev.balihoo-cloud.com'
+  ...
+end
 ```
 
 The `location_key` is an optional parameter. When not given the api will require
