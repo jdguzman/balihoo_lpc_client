@@ -24,4 +24,5 @@ module BalihooLpcClient
   class BalihooLpcError < StandardError; end
   class AuthenticationError < BalihooLpcError; end
   class ApiOptionError < BalihooLpcError; end
+  class NotAuthenticatedError < BalihooLpcError; end
 end

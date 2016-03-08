@@ -33,125 +33,150 @@ module BalihooLpcClient
       end
     end
 
-    describe '.campaigns' do
+    context 'Endpoints' do
       before do
         allow_any_instance_of(Request::Campaigns).to receive(:fetch)
       end
 
-      it 'accepts hash options with default of {}' do
-        expect { subject.campaigns(params: {}) }.not_to raise_error
+      describe 'called without authentication first' do
+        it 'raises a NotAuthenticatedError' do
+          expect { subject.campaigns }.to raise_error NotAuthenticatedError
+        end
       end
 
-      it 'raises ApiOptionError if opts locations missing and config location_key nil' do
-        config.location_key = nil
-        expect { subject.campaigns }.to raise_error ApiOptionError
+      describe '.campaigns' do
+        before do
+          allow(subject).to receive(:authenticated?).and_return(true)
+          allow_any_instance_of(Request::Campaigns).to receive(:fetch)
+        end
+
+        it 'accepts hash options with default of {}' do
+          expect { subject.campaigns(params: {}) }.not_to raise_error
+        end
+
+        it 'raises ApiOptionError if opts locations missing and config location_key nil' do
+          config.location_key = nil
+          expect { subject.campaigns }.to raise_error ApiOptionError
+        end
+
+        it 'raises ApiOptionError if opts locations is not an array' do
+          config.location_key = nil
+          expect { subject.campaigns(params: { locations: '1' }) }.to raise_error ApiOptionError
+        end
+
+        it 'creates an instance of Request::Campaigns' do
+          expect(Request::Campaigns).to receive(:new).with(api: subject, params: {}).and_call_original
+          subject.campaigns
+        end
+
+        it 'calls fetch on a Request::Campaigns instance' do
+          expect_any_instance_of(Request::Campaigns).to receive(:fetch)
+          subject.campaigns
+        end
       end
 
-      it 'raises ApiOptionError if opts locations is not an array' do
-        config.location_key = nil
-        expect { subject.campaigns(params: { locations: '1' }) }.to raise_error ApiOptionError
+      describe '.tactics' do
+        before do
+          allow(subject).to receive(:authenticated?).and_return(true)
+          allow_any_instance_of(Request::Tactics).to receive(:fetch)
+        end
+
+        it 'accepts hash options with default of {}' do
+          expect { subject.tactics(campaign_id: 1, params: {}) }.not_to raise_error
+        end
+
+        it 'raises MissingApiOptionError if opts locations missing and config location_key nil' do
+          config.location_key = nil
+          expect { subject.tactics(campaign_id: 1) }.to raise_error ApiOptionError
+        end
+
+        it 'creates an instance of Request::Tactics' do
+          expect(Request::Tactics).to receive(:new).with(api: subject, params: {}, campaign_id: 1).and_call_original
+          subject.tactics(campaign_id: 1)
+        end
+
+        it 'calls fetch on a Request::Tactics instance' do
+          expect_any_instance_of(Request::Tactics).to receive(:fetch)
+          subject.tactics(campaign_id: 1)
+        end
       end
 
-      it 'creates an instance of Request::Campaigns' do
-        expect(Request::Campaigns).to receive(:new).with(api: subject, params: {}).and_call_original
-        subject.campaigns
+      describe '.campaigns_with_tactics' do
+        before do
+          allow(subject).to receive(:authenticated?).and_return(true)
+          allow_any_instance_of(Request::CampaignsWithTactics).to receive(:fetch)
+        end
+
+        it 'accepts hash options with default of {}' do
+          expect { subject.campaigns_with_tactics(params: {}) }.not_to raise_error
+        end
+
+        it 'raises MissingApiOptionError if opts locations missing and config location_key nil' do
+          config.location_key = nil
+          expect { subject.campaigns_with_tactics }.to raise_error ApiOptionError
+        end
+
+        it 'creates an instance of Request::CampaignsWithTactics' do
+          expect(Request::CampaignsWithTactics).to receive(:new).with(api: subject, params: {}).and_call_original
+          subject.campaigns_with_tactics
+        end
+
+        it 'calls fetch on a Request::CampaignsWithTactics instance' do
+          expect_any_instance_of(Request::CampaignsWithTactics).to receive(:fetch)
+          subject.campaigns_with_tactics
+        end
       end
 
-      it 'calls fetch on a Request::Campaigns instance' do
-        expect_any_instance_of(Request::Campaigns).to receive(:fetch)
-        subject.campaigns
-      end
-    end
+      describe '.metrics' do
+        before do
+          allow(subject).to receive(:authenticated?).and_return(true)
+          allow_any_instance_of(Request::Metrics).to receive(:fetch)
+        end
 
-    describe '.tactics' do
-      it 'accepts hash options with default of {}' do
-        allow_any_instance_of(Request::Tactics).to receive(:fetch)
-        expect { subject.tactics(campaign_id: 1, params: {}) }.not_to raise_error
-      end
+        it 'accepts hash options with default of {}' do
+          expect { subject.metrics(tactic_id: 1, params: {}) }.not_to raise_error
+        end
 
-      it 'raises MissingApiOptionError if opts locations missing and config location_key nil' do
-        config.location_key = nil
-        expect { subject.tactics(campaign_id: 1) }.to raise_error ApiOptionError
-      end
+        it 'raises MissingApiOptionError if opts locations missing and config location_key nil' do
+          config.location_key = nil
+          expect { subject.metrics(tactic_id: 1) }.to raise_error ApiOptionError
+        end
 
-      it 'creates an instance of Request::Tactics' do
-        allow_any_instance_of(Request::Tactics).to receive(:fetch)
-        expect(Request::Tactics).to receive(:new).with(api: subject, params: {}, campaign_id: 1).and_call_original
-        subject.tactics(campaign_id: 1)
-      end
+        it 'creates an instance of Request::Metrics' do
+          expect(Request::Metrics).to receive(:new).with(api: subject, params: {}, tactic_id: 1).and_call_original
+          subject.metrics(tactic_id: 1)
+        end
 
-      it 'calls fetch on a Request::Tactics instance' do
-        expect_any_instance_of(Request::Tactics).to receive(:fetch)
-        subject.tactics(campaign_id: 1)
-      end
-    end
-
-    describe '.campaigns_with_tactics' do
-      it 'accepts hash options with default of {}' do
-        allow_any_instance_of(Request::CampaignsWithTactics).to receive(:fetch)
-        expect { subject.campaigns_with_tactics(params: {}) }.not_to raise_error
+        it 'calls fetch on a Request::Metrics instance' do
+          expect_any_instance_of(Request::Metrics).to receive(:fetch)
+          subject.metrics(tactic_id: 1)
+        end
       end
 
-      it 'raises MissingApiOptionError if opts locations missing and config location_key nil' do
-        config.location_key = nil
-        expect { subject.campaigns_with_tactics }.to raise_error ApiOptionError
-      end
+      describe '.website_metrics' do
+        before do
+          allow(subject).to receive(:authenticated?).and_return(true)
+          allow_any_instance_of(Request::WebsiteMetrics).to receive(:fetch)
+        end
 
-      it 'creates an instance of Request::CampaignsWithTactics' do
-        allow_any_instance_of(Request::CampaignsWithTactics).to receive(:fetch)
-        expect(Request::CampaignsWithTactics).to receive(:new).with(api: subject, params: {}).and_call_original
-        subject.campaigns_with_tactics
-      end
+        it 'accepts hash options with default of {}' do
+          expect { subject.website_metrics(params: {}) }.not_to raise_error
+        end
 
-      it 'calls fetch on a Request::CampaignsWithTactics instance' do
-        expect_any_instance_of(Request::CampaignsWithTactics).to receive(:fetch)
-        subject.campaigns_with_tactics
-      end
-    end
+        it 'raises MissingApiOptionError if opts locations missing and config location_key nil' do
+          config.location_key = nil
+          expect { subject.website_metrics }.to raise_error ApiOptionError
+        end
 
-    describe '.metrics' do
-      it 'accepts hash options with default of {}' do
-        allow_any_instance_of(Request::Metrics).to receive(:fetch)
-        expect { subject.metrics(tactic_id: 1, params: {}) }.not_to raise_error
-      end
+        it 'creates an instance of Request::WebsiteMetrics' do
+          expect(Request::WebsiteMetrics).to receive(:new).with(api: subject, params: {}).and_call_original
+          subject.website_metrics
+        end
 
-      it 'raises MissingApiOptionError if opts locations missing and config location_key nil' do
-        config.location_key = nil
-        expect { subject.metrics(tactic_id: 1) }.to raise_error ApiOptionError
-      end
-
-      it 'creates an instance of Request::Metrics' do
-        allow_any_instance_of(Request::Metrics).to receive(:fetch)
-        expect(Request::Metrics).to receive(:new).with(api: subject, params: {}, tactic_id: 1).and_call_original
-        subject.metrics(tactic_id: 1)
-      end
-
-      it 'calls fetch on a Request::Metrics instance' do
-        expect_any_instance_of(Request::Metrics).to receive(:fetch)
-        subject.metrics(tactic_id: 1)
-      end
-    end
-
-    describe '.website_metrics' do
-      it 'accepts hash options with default of {}' do
-        allow_any_instance_of(Request::WebsiteMetrics).to receive(:fetch)
-        expect { subject.website_metrics(params: {}) }.not_to raise_error
-      end
-
-      it 'raises MissingApiOptionError if opts locations missing and config location_key nil' do
-        config.location_key = nil
-        expect { subject.website_metrics }.to raise_error ApiOptionError
-      end
-
-      it 'creates an instance of Request::WebsiteMetrics' do
-        allow_any_instance_of(Request::WebsiteMetrics).to receive(:fetch)
-        expect(Request::WebsiteMetrics).to receive(:new).with(api: subject, params: {}).and_call_original
-        subject.website_metrics
-      end
-
-      it 'calls fetch on a Request::WebsiteMetrics instance' do
-        expect_any_instance_of(Request::WebsiteMetrics).to receive(:fetch)
-        subject.website_metrics
+        it 'calls fetch on a Request::WebsiteMetrics instance' do
+          expect_any_instance_of(Request::WebsiteMetrics).to receive(:fetch)
+          subject.website_metrics
+        end
       end
     end
   end

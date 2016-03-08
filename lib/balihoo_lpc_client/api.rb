@@ -34,15 +34,26 @@ module BalihooLpcClient
     private
 
     def validate_params_and_fetch!(**args)
-      locations = args[:params][:locations]
+      validate_locations_key locations: args[:params][:locations]
+      authenticated?
 
+      fetch(**args)
+    end
+
+    def validate_locations_key(locations:)
       if config.location_key.nil? && locations.nil?
         raise ApiOptionError, 'must give params[:locations] since no location_key given'
       elsif config.location_key.nil? && !locations.is_a?(Array)
         raise ApiOptionError, 'locations must be an array'
       end
+    end
 
-      fetch(**args)
+    def authenticated?
+      if config.client_id.nil? || config.client_api_key.nil?
+        raise NotAuthenticatedError, 'must call authenticate! before any endpoint'
+      end
+
+      true
     end
 
     def fetch(**args)
