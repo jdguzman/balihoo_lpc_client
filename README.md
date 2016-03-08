@@ -68,7 +68,9 @@ api.authenticate!
 ```
 
 The `authenticate!` method will call out to Balihoo and set the `client_id` and
-`client_api_key` on the config object for you.
+`client_api_key` on the config object for you. **If an endpoint method is called
+without calling `authenticate!` first a `BalihooLpcClient::NotAuthenticatedError`
+will be raised.**
 
 ```ruby
 config.client_id # => <client_id from Balihoo>
