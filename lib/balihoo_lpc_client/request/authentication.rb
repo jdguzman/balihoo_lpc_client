@@ -25,7 +25,7 @@ module BalihooLpcClient
         auth = Response::Authentication.new(data)
         config.client_id = auth.client_id
         config.client_api_key = auth.client_api_key
-        data
+        auth
       end
     end
   end

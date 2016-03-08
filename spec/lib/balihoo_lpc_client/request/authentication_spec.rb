@@ -60,8 +60,9 @@ module BalihooLpcClient
             expect(config.client_api_key).to eq 'test_client_api_key'
           end
 
-          it 'returns parsed response' do
-            expect(subject.authenticate!).to eq JSON.parse(return_opts[:body])
+          it 'returns Response::Authentication object' do
+            response = JSON.parse(return_opts[:body])
+            expect(subject.authenticate!).to eq Response::Authentication.new(response)
           end
         end
 
