@@ -11,7 +11,7 @@ module BalihooLpcClient
       def fetch
         response = self.class.get("/tactic/#{tactic_id}/metrics", opts).parsed_response
         handle_errors_with(klass: ApiResponseError, response: response)
-        handle_response(response: response, klass: Response::Metric, mappable: false)
+        handle_response(response: response, klass: Response::MetricBase, mappable: false)
       end
     end
   end

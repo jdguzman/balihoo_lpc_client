@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module BalihooLpcClient
   module Response
-    describe Metric do
+    describe MetricBase do
       let(:params) do
         {
           'tacticIds' => [1],

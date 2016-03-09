@@ -69,7 +69,7 @@ module BalihooLpcClient
 
           it 'returns a Response::Metric object' do
             returned = JSON.parse return_opts[:body]
-            expect(subject.fetch).to eq Response::Metric.new(returned)
+            expect(subject.fetch).to eq Response::MetricBase.new(returned)
           end
 
           context 'with params' do
@@ -102,7 +102,7 @@ module BalihooLpcClient
               context 'requesting single location' do
                 it 'returns a Response::Metric object' do
                   returned = JSON.parse(return_opts[:body])
-                  expect(subject.fetch).to eq Response::Metric.new(returned)
+                  expect(subject.fetch).to eq Response::MetricBase.new(returned)
                 end
               end
 
@@ -120,7 +120,7 @@ module BalihooLpcClient
                 it 'returns a hash with location as key and Response::Metric value' do
                   returned = JSON.parse return_opts[:body]
                   returned = returned.inject({}) do |h, pair|
-                    h.merge({ pair[0] => Response::Metric.new(pair[1]) })
+                    h.merge({ pair[0] => Response::MetricBase.new(pair[1]) })
                   end
                   expect(subject.fetch).to eq returned
                 end
