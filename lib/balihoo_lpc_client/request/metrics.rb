@@ -11,7 +11,20 @@ module BalihooLpcClient
       def fetch
         response = self.class.get("/tactic/#{tactic_id}/metrics", opts).parsed_response
         handle_errors_with(klass: ApiResponseError, response: response)
-        handle_response(response: response, klass: Response::MetricBase, mappable: false)
+        handle_response(response: response, klass: klass_for(response: response), mappable: false)
+      end
+
+      private
+
+      def klass_for(response:)
+        case (multiple_locations? ? response.values.first['channel'] : response['channel'])
+        when /Email/
+          Response::EmailMetric
+        when /Paid Search/
+          Response::PaidSearchMetric
+        when /Display/
+          Response::DisplayMetric
+        end
       end
     end
   end
