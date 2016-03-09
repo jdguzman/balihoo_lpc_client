@@ -67,9 +67,8 @@ module BalihooLpcClient
             subject.fetch
           end
 
-          it 'returns a Response::Metric object' do
-            returned = JSON.parse return_opts[:body]
-            expect(subject.fetch).to eq Response::MetricBase.new(returned)
+          it 'returns a Response::MetricBase object' do
+            expect(subject.fetch).to be_a Response::MetricBase
           end
 
           context 'with params' do
@@ -100,9 +99,9 @@ module BalihooLpcClient
               end
 
               context 'requesting single location' do
-                it 'returns a Response::Metric object' do
+                it 'returns a Response::MetricBase object' do
                   returned = JSON.parse(return_opts[:body])
-                  expect(subject.fetch).to eq Response::MetricBase.new(returned)
+                  expect(subject.fetch).to eq Response::PaidSearchMetric.new(returned)
                 end
               end
 
@@ -117,10 +116,10 @@ module BalihooLpcClient
                   }
                 end
 
-                it 'returns a hash with location as key and Response::Metric value' do
+                it 'returns a hash with location as key and Response::MetricBase value' do
                   returned = JSON.parse return_opts[:body]
                   returned = returned.inject({}) do |h, pair|
-                    h.merge({ pair[0] => Response::MetricBase.new(pair[1]) })
+                    h.merge({ pair[0] => Response::PaidSearchMetric.new(pair[1]) })
                   end
                   expect(subject.fetch).to eq returned
                 end
@@ -132,6 +131,59 @@ module BalihooLpcClient
                 expect(described_class).to receive(:get).with("/tactic/#{subject.tactic_id}/metrics", { headers: request_headers, query: subject.send(:sanitized_params) }).and_call_original
                 subject.fetch
               end
+            end
+          end
+        end
+
+        context 'metrics types' do
+          before do
+            stub_request(:get, "#{subject.class.base_uri}/tactic/#{subject.tactic_id}/metrics#{params}")
+              .with(:headers => request_headers)
+              .to_return(**return_opts)
+          end
+
+          context 'Email' do
+            let(:return_opts) do
+              {
+                status: 200,
+                body: '{"tacticIds":[575],"channel":"Email","sends":95,"opens":15,"clicks":37,"delivered":40,"bounced":3,"unsubscribed":4,"markedSpam":1}',
+                headers: { 'Content-Type' => 'application/json; charset=utf-8' }
+              }
+            end
+
+            it 'returns a Response::PaidSearchMetrics object' do
+              returned = JSON.parse(return_opts[:body])
+              expect(subject.fetch).to eq(Response::EmailMetric.new(returned)).and be_a Response::EmailMetric
+            end
+          end
+
+          context 'Paid Search' do
+            let(:return_opts) do
+              {
+                status: 200,
+                body: '{"tacticIds":[575],"channel":"Paid Search","clicks":37,"spend":150.95,"impressions":1170,"ctr":3.16,"avgCpc":4.08,"avgCpm":129.02}',
+                headers: { 'Content-Type' => 'application/json; charset=utf-8' }
+              }
+            end
+
+            it 'returns a Response::PaidSearchMetrics object' do
+              returned = JSON.parse(return_opts[:body])
+              expect(subject.fetch).to eq(Response::PaidSearchMetric.new(returned)).and be_a Response::PaidSearchMetric
+            end
+          end
+
+          context 'Display' do
+            let(:return_opts) do
+              {
+                status: 200,
+                body: '{"tacticIds":[575],"channel":"Display","impressions":100,"spend":150.95,"ctr":3.16,"avgCpc":4.08,"avgCpm":129.02}',
+                headers: { 'Content-Type' => 'application/json; charset=utf-8' }
+              }
+            end
+
+            it 'returns a Response::PaidSearchMetrics object' do
+              returned = JSON.parse(return_opts[:body])
+              expect(subject.fetch).to eq(Response::DisplayMetric.new(returned)).and be_a Response::DisplayMetric
             end
           end
         end

@@ -2,17 +2,17 @@ require 'spec_helper'
 
 module BalihooLpcClient
   module Response
-    describe MetricBase do
+    describe PaidSearchMetric do
       let(:params) do
         {
           'tacticIds' => [1],
           'channel' => 1,
-          'clicks' => "Test",
-          'spend' => "2015-09-21",
-          'impressions' => "2016-10-07",
-          'ctr' => "Paid Search",
-          'avgCpc' => "",
-          'avgCpm' => 'https://fb.balihoo-cloud.com/forms/212/render'
+          'clicks' => 45,
+          'spend' => 125.12,
+          'impressions' => 100,
+          'ctr' => 0.45,
+          'avgCpc' => 2.33,
+          'avgCpm' => 12.51
         }
       end
 
