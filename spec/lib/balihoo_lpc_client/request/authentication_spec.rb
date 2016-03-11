@@ -67,18 +67,36 @@ module BalihooLpcClient
         end
 
         context 'error' do
-          let(:return_opts) do
-            {
-              status: 401,
-              body: 'Could not authenticate',
-              headers: { 'Content-Type' => 'text/plain; charset=utf-8' }
-            }
+          context 'authentication' do
+            let(:return_opts) do
+              {
+                status: 401,
+                body: 'Could not authenticate',
+                headers: { 'Content-Type' => 'text/plain; charset=utf-8' }
+              }
+            end
+
+            it 'raises AuthenticationError if authentication fails' do
+              stub_request(:post, "#{subject.class.base_uri}/genClientAPIKey#{params}")
+                  .to_return(**return_opts)
+              expect { subject.authenticate! }.to raise_error AuthenticationError
+            end
           end
 
-          it 'raises AuthenticationError if authentication fails' do
-            stub_request(:post, "#{subject.class.base_uri}/genClientAPIKey#{params}")
-                .to_return(**return_opts)
-            expect { subject.authenticate! }.to raise_error AuthenticationError
+          context 'location key not found' do
+            let(:return_opts) do
+              {
+                status: 401,
+                body: 'Location key: 1 not found for brand: brand',
+                headers: { 'Content-Type' => 'text/plain; charset=utf-8' }
+              }
+            end
+
+            it 'raises LocationKeyNotFoundError if location not found' do
+              stub_request(:post, "#{subject.class.base_uri}/genClientAPIKey#{params}")
+                  .to_return(**return_opts)
+              expect { subject.authenticate! }.to raise_error LocationKeyNotFoundError
+            end
           end
         end
       end

@@ -18,8 +18,11 @@ module BalihooLpcClient
 
       def handle_errors_with(klass:, response:)
         if response.is_a?(String)
-          if response =~ /session has expired/
+          case response
+          when /session has expired/
             raise ApiSessionExpiredError, response
+          when /Location key: .+ not found for brand: .+/
+            raise LocationKeyNotFoundError, response
           else
             raise klass, response
           end

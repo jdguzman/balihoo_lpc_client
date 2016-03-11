@@ -30,4 +30,5 @@ module BalihooLpcClient
   class NotAuthenticatedError < BalihooLpcError; end
   class ApiSessionExpiredError < BalihooLpcError; end
   class ApiResponseError < BalihooLpcError; end
+  class LocationKeyNotFoundError < BalihooLpcError; end
 end
